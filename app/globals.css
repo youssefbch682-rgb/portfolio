@@ -199,6 +199,87 @@ html.lenis { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
+/* ─── Hero premium ──────────────────────────────────── */
+.hero-perspective {
+  perspective: 1200px;
+}
+
+/* Couche fumée : uniquement transform (translate + scale) animé,
+   le blur est statique -> le navigateur compose la couche sans la repeindre à chaque frame */
+.smoke-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  will-change: transform;
+}
+.smoke-blob-1 {
+  width: 480px;
+  height: 480px;
+  top: -10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.5), transparent 70%);
+  animation: smokeDrift1 22s ease-in-out infinite;
+}
+.smoke-blob-2 {
+  width: 560px;
+  height: 560px;
+  bottom: -15%;
+  right: -8%;
+  background: radial-gradient(circle, rgba(109, 40, 217, 0.4), transparent 70%);
+  animation: smokeDrift2 26s ease-in-out infinite;
+}
+.smoke-blob-3 {
+  width: 380px;
+  height: 380px;
+  top: 30%;
+  left: 40%;
+  background: radial-gradient(circle, rgba(248, 248, 255, 0.12), transparent 70%);
+  animation: smokeDrift3 30s ease-in-out infinite;
+}
+@keyframes smokeDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6%, 4%) scale(1.08); }
+}
+@keyframes smokeDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-5%, -6%) scale(1.05); }
+}
+@keyframes smokeDrift3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, -5%) scale(1.1); }
+}
+
+/* Lumières violettes qui "respirent" légèrement (opacity = compositor-only) */
+.breathing-light {
+  animation-name: breathingLight, float;
+  animation-duration: 6s, 6s;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  will-change: opacity, transform;
+}
+@keyframes breathingLight {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Particules Hero : légères, purement CSS (pas de canvas ni de boucle JS) */
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(167, 139, 250, 0.85);
+  box-shadow: 0 0 6px rgba(139, 92, 246, 0.8);
+  will-change: transform, opacity;
+  animation-name: heroParticleFloat;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes heroParticleFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.15; }
+  50% { transform: translateY(-28px); opacity: 0.9; }
+}
+
 /* ─── Reduced motion ────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
