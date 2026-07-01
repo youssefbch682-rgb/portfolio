@@ -5,14 +5,14 @@
 
 // ─── Informations personnelles ───────────────────────────
 export const siteConfig = {
-  name: "VOTRE NOM",
+  name: "BACHIR YOUSEF",
   title: "Graphiste & Designer Visuel",
   tagline: "Je frappe fort. Je crée précis.",
   description:
     "Chaque projet est un combat : préparation, stratégie, exécution. Je transforme vos idées en identités visuelles qui marquent les esprits.",
-  email: "contact@votreportfolio.fr",
-  phone: "+33 6 00 00 00 00",
-  location: "Paris, France",
+  email: "youssef.bch682@gmail.com",
+  phone: "+33 7 49 37 81 98",
+  location: "Lyon, France",
   availableForWork: true,
   socials: {
     instagram: "https://instagram.com/",
@@ -47,19 +47,11 @@ export const skillsData = [
     tags: ["Illustrator", "Photoshop", "InDesign"],
   },
   {
-    id: "covering",
-    icon: "Car",
-    title: "Covering Véhicule",
-    description: "Habillage complet ou partiel de véhicules. Décoration, publicité mobile, customisation.",
-    level: 90,
-    tags: ["Vinyle", "Découpe", "Impression"],
-  },
-  {
     id: "signaletique",
     icon: "Layout",
     title: "Signalétique",
     description: "Enseignes, panneaux, habillage vitrine, signalétique intérieure et extérieure.",
-    level: 88,
+    level: 95,
     tags: ["Grand Format", "Enseignes", "Vitrophanie"],
   },
   {
@@ -67,7 +59,7 @@ export const skillsData = [
     icon: "Box",
     title: "Maquettes",
     description: "Création de maquettes 3D et mise en situation pour visualiser vos projets avant production.",
-    level: 82,
+    level: 65,
     tags: ["3D", "Mockup", "Visualisation"],
   },
   {
@@ -83,16 +75,8 @@ export const skillsData = [
     icon: "Monitor",
     title: "Web Design",
     description: "Interfaces modernes, UX/UI, maquettes web et direction artistique digitale.",
-    level: 85,
-    tags: ["Figma", "UI/UX", "Responsive"],
-  },
-  {
-    id: "retouche",
-    icon: "Image",
-    title: "Retouche Visuelle",
-    description: "Retouche photo, compositing, manipulation d'images, rendu photo-réaliste.",
     level: 90,
-    tags: ["Photoshop", "Lightroom", "Compositing"],
+    tags: ["Figma", "UI/UX", "Responsive"],
   },
   {
     id: "ia",
