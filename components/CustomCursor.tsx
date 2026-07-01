@@ -11,36 +11,45 @@ export default function CustomCursor() {
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
+    // Le curseur custom n'a pas de sens sur écrans tactiles (pas de souris)
+    const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    if (isTouch) return;
+
     let mouseX = 0, mouseY = 0;
     let ringX = 0, ringY = 0;
+    let animId: number;
 
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      dot.style.left = mouseX + "px";
-      dot.style.top = mouseY + "px";
+      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
     };
 
     const animate = () => {
       ringX += (mouseX - ringX) * 0.12;
       ringY += (mouseY - ringY) * 0.12;
-      ring.style.left = ringX + "px";
-      ring.style.top = ringY + "px";
-      requestAnimationFrame(animate);
+      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+      animId = requestAnimationFrame(animate);
     };
     animate();
 
     const onEnter = () => ring.classList.add("hovering");
     const onLeave = () => ring.classList.remove("hovering");
 
-    document.addEventListener("mousemove", onMove);
-    document.querySelectorAll("a, button, [data-cursor]").forEach((el) => {
+    document.addEventListener("mousemove", onMove, { passive: true });
+    const interactiveEls = document.querySelectorAll("a, button, [data-cursor]");
+    interactiveEls.forEach((el) => {
       el.addEventListener("mouseenter", onEnter);
       el.addEventListener("mouseleave", onLeave);
     });
 
     return () => {
+      cancelAnimationFrame(animId);
       document.removeEventListener("mousemove", onMove);
+      interactiveEls.forEach((el) => {
+        el.removeEventListener("mouseenter", onEnter);
+        el.removeEventListener("mouseleave", onLeave);
+      });
     };
   }, []);
 

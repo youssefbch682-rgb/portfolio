@@ -18,8 +18,17 @@ export default function AnimatedCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Respecte la préférence "mouvement réduit" de l'utilisateur
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return;
+
     let animId: number;
     let particles: Particle[] = [];
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    let running = true;
+
+    // Moins de particules sur petits écrans / mobiles
+    const getParticleCount = () => (window.innerWidth < 768 ? 25 : 45);
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -38,22 +47,25 @@ export default function AnimatedCanvas() {
     });
 
     resize();
-    particles = Array.from({ length: 60 }, spawn);
+    particles = Array.from({ length: getParticleCount() }, spawn);
 
+    // Connexions dessinées avec un seuil précalculé (évite un sqrt() par paire inutile)
+    const maxDist = 110;
+    const maxDistSq = maxDist * maxDist;
     const drawConnections = () => {
-      const maxDist = 120;
+      ctx.lineWidth = 0.5;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
+          const distSq = dx * dx + dy * dy;
+          if (distSq < maxDistSq) {
+            const dist = Math.sqrt(distSq);
             const alpha = (1 - dist / maxDist) * 0.12;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.strokeStyle = `rgba(139,92,246,${alpha})`;
-            ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }
@@ -61,6 +73,7 @@ export default function AnimatedCanvas() {
     };
 
     const animate = () => {
+      if (!running) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawConnections();
 
@@ -85,15 +98,7 @@ export default function AnimatedCanvas() {
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        // Glow particle
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-        gradient.addColorStop(0, `rgba(167,139,250,${alpha})`);
-        gradient.addColorStop(1, `rgba(109,40,217,0)`);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
+        // Point simple (le glow en dégradé recréé par particule à chaque frame était trop coûteux)
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(167,139,250,${alpha})`;
@@ -103,9 +108,36 @@ export default function AnimatedCanvas() {
       animId = requestAnimationFrame(animate);
     };
 
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resize();
+        particles = Array.from({ length: getParticleCount() }, spawn);
+      }, 200);
+    };
+
+    // Coupe l'animation quand l'onglet n'est pas visible (économise CPU/batterie)
+    const handleVisibility = () => {
+      if (document.hidden) {
+        running = false;
+        cancelAnimationFrame(animId);
+      } else if (!running) {
+        running = true;
+        animate();
+      }
+    };
+
     animate();
-    window.addEventListener("resize", () => { resize(); particles = Array.from({ length: 60 }, spawn); });
-    return () => cancelAnimationFrame(animId);
+    window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(animId);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   return (

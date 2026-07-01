@@ -35,26 +35,30 @@ body {
 /* ─── Custom Cursor ─────────────────────────────────── */
 .cursor-dot {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 8px;
   height: 8px;
   background: var(--violet-neon);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+  will-change: transform;
+  transition: width 0.3s ease, height 0.3s ease;
   box-shadow: 0 0 10px var(--violet-neon), 0 0 20px var(--violet-electric);
 }
 .cursor-ring {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 36px;
   height: 36px;
   border: 1px solid rgba(139, 92, 246, 0.5);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
 }
 .cursor-ring.hovering {
   width: 60px;
