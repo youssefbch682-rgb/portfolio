@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Variables ─────────────────────────────────────── */
+:root {
+  --void: #000000;
+  --deep-black: #080808;
+  --carbon: #0E0E0E;
+  --charcoal: #141414;
+  --anthracite: #1A1A1A;
+  --blue-black: #0A0A12;
+  --violet-neon: #8B5CF6;
+  --violet-electric: #7C3AED;
+  --violet-soft: #A78BFA;
+  --violet-deep: #4C1D95;
+  --violet-dark: #2E1065;
+  --violet-glow: #6D28D9;
+  --frost: #F8F8FF;
+  --silver: #C4C4D4;
+  --mist: #6B6B80;
+}
+
+/* ─── Base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--deep-black);
+  color: var(--frost);
+  overflow-x: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: none;
+}
+
+/* ─── Custom Cursor ─────────────────────────────────── */
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--violet-neon);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+  box-shadow: 0 0 10px var(--violet-neon), 0 0 20px var(--violet-electric);
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+.cursor-ring.hovering {
+  width: 60px;
+  height: 60px;
+  border-color: var(--violet-neon);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--deep-black); }
+::-webkit-scrollbar-thumb { background: var(--violet-electric); border-radius: 2px; }
+
+/* ─── Neon / Glow ───────────────────────────────────── */
+.neon-violet {
+  text-shadow:
+    0 0 10px rgba(139,92,246,0.9),
+    0 0 30px rgba(139,92,246,0.6),
+    0 0 60px rgba(109,40,217,0.4);
+}
+.glow-box-violet {
+  box-shadow:
+    0 0 20px rgba(139,92,246,0.3),
+    0 0 40px rgba(139,92,246,0.15),
+    inset 0 0 20px rgba(139,92,246,0.05);
+}
+.glow-border {
+  border-color: rgba(139,92,246,0.4);
+  box-shadow: 0 0 15px rgba(139,92,246,0.2), inset 0 0 15px rgba(139,92,246,0.05);
+}
+
+/* ─── Grid ──────────────────────────────────────────── */
+.bg-grid-violet {
+  background-image:
+    linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Grain overlay ─────────────────────────────────── */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9000;
+  animation: grain 0.5s steps(1) infinite;
+}
+
+/* ─── Gradient Text ─────────────────────────────────── */
+.text-gradient-violet {
+  background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 40%, #6D28D9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-white-violet {
+  background: linear-gradient(135deg, #F8F8FF 0%, #C4C4D4 50%, #A78BFA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Buttons ───────────────────────────────────────── */
+.btn-violet {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--violet-electric), var(--violet-glow));
+  color: white;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.15em;
+  padding: 14px 36px;
+  border: none;
+  transition: all 0.3s ease;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.btn-violet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-violet:hover::before { opacity: 1; }
+.btn-violet:hover {
+  box-shadow: 0 0 30px rgba(139,92,246,0.6), 0 0 60px rgba(139,92,246,0.3);
+  transform: translateY(-2px);
+}
+
+.btn-outline-violet {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  color: var(--violet-soft);
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.15em;
+  padding: 14px 36px;
+  border: 1px solid rgba(139,92,246,0.4);
+  transition: all 0.3s ease;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.btn-outline-violet:hover {
+  background: rgba(139,92,246,0.1);
+  border-color: var(--violet-neon);
+  color: white;
+  box-shadow: 0 0 20px rgba(139,92,246,0.3);
+}
+
+/* ─── Card ──────────────────────────────────────────── */
+.card-violet {
+  background: linear-gradient(135deg, rgba(20,20,20,0.9), rgba(10,10,18,0.9));
+  border: 1px solid rgba(139,92,246,0.15);
+  transition: all 0.4s ease;
+  transform-style: preserve-3d;
+}
+.card-violet:hover {
+  border-color: rgba(139,92,246,0.5);
+  box-shadow: 0 20px 60px rgba(139,92,246,0.15), 0 0 30px rgba(139,92,246,0.1);
+}
+
+/* ─── Section ───────────────────────────────────────── */
+.section-padding { @apply py-24 px-6 md:px-12 lg:px-24; }
+
+/* ─── Skill bar ─────────────────────────────────────── */
+.skill-bar-violet {
+  background: linear-gradient(90deg, var(--violet-electric), var(--violet-soft));
+  box-shadow: 0 0 10px rgba(139,92,246,0.5), 0 0 20px rgba(139,92,246,0.2);
+}
+
+/* ─── Lenis ─────────────────────────────────────────── */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ─── Reduced motion ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
